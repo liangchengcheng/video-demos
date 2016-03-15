@@ -789,13 +789,13 @@ public class MainActivity extends Activity implements
     }
 
     private float getStartPosition() {
-//        if (mFromStart)
-//            return 1.1f;
-//        if (mStartPos <= 0.0f || mStartPos >= 1.0f)
-//            return PreferenceUtils.getFloat(mUri
-//                    + VP.SESSION_LAST_POSITION_SUFIX, 7.7f);
-//        return mStartPos;
-        return 0.0f;
+        if (mFromStart)
+            return 1.1f;
+        if (mStartPos <= 0.0f || mStartPos >= 1.0f)
+            return PreferenceUtils.getFloat(mUri
+                    + VP.SESSION_LAST_POSITION_SUFIX, 7.7f);
+        return mStartPos;
+        //return 0.0f;
     }
 
     @Override
