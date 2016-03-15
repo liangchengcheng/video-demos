@@ -3,4 +3,20 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="gray">#808080ff</color>
+    <color name="bilibg">#f2f2f2</color>
+
+    <color name="blue">#ff0000ff</color>
+    <color name="green">#ff00ff00</color>
+    <color name="red">#ffff0000</color>
+    <color name="higtlight">#ff0078f0</color>
+    <color name="durationtext">#ff7d7d7d</color>
+    <color name="background">#ffc3ddea</color>
+    <color name="yellow">#ffffcc00</color>
+    <color name="title">#ff274462</color>
+
+    <color name="transparentblue">#445CACEE</color>
+    <color name="bili_red">#db77ab</color>
+    <color name="bili_red2">#efc1d9</color>
+    <color name="bili_red3">#fcf4f8</color>
 </resources>
