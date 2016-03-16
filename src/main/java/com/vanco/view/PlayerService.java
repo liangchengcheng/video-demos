@@ -128,7 +128,6 @@ public class PlayerService extends Service implements
 
 	@Override
 	public IBinder onBind(Intent intent) {
-
 		return mBinder;
 	}
 

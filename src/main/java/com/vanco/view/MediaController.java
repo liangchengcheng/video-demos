@@ -146,7 +146,7 @@ public class MediaController extends FrameLayout {
 				Method setWindowLayoutType = PopupWindow.class.getMethod("setWindowLayoutType", new Class[] { int.class });
 				setWindowLayoutType.invoke(mWindow, WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG);
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 		}
 	}
@@ -206,6 +206,9 @@ public class MediaController extends FrameLayout {
 		return ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.mediacontroller, this);
 	}
 
+	/**
+	 * 控件的初始化
+     */
 	private void findViewItems(View v) {
 		mMediaController = v.findViewById(R.id.mediacontroller);
 
@@ -248,7 +251,7 @@ public class MediaController extends FrameLayout {
 		mProgress.setOnSeekBarChangeListener(mSeekListener);
 		mProgress.setMax(DEFAULT_SEEKBAR_VALUE);
 
-		// TODO: 16/3/16 弹幕相关 
+		// TODO: 16/3/16 弹幕相关
 		mDanmakuSend = (ImageButton) v.findViewById(R.id.mediacontroller_send_danmaku);
 		mDanmakuSend.setOnClickListener(mDanmakuSendListener);
 

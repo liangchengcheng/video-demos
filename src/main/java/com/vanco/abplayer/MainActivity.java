@@ -31,7 +31,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -114,11 +116,14 @@ public class MainActivity extends Activity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //设置常亮显示全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (!io.vov.vitamio.LibsChecker.checkVitamioLibs(this))
             return;
 
+        //初始化视频服务器
         vPlayerServiceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -144,6 +149,9 @@ public class MainActivity extends Activity implements
 
     }
 
+    /**
+     * 附加视频播放控制器
+     */
     private void attachMediaController() {
         if (mMediaController != null) {
             mNeedLock = mMediaController.isLocked();
@@ -162,6 +170,7 @@ public class MainActivity extends Activity implements
         super.onStart();
         if (!mCreated)
             return;
+        //绑定视频播放功能
         Intent serviceIntent = new Intent(this, PlayerService.class);
         serviceIntent.putExtra("isHWCodec", mIsHWCodec);
         bindService(serviceIntent, vPlayerServiceConnection,
@@ -264,11 +273,7 @@ public class MainActivity extends Activity implements
         mSubtitleImage = (ImageView) findViewById(R.id.subtitle_image);
         mVideoLoadingText = (TextView) findViewById(R.id.video_loading_text);
         mVideoLoadingLayout = findViewById(R.id.video_loading);
-        // mLoadingProgressView =
-        // mVideoLoadingLayout.findViewById(R.id.video_loading_progress);
 
-        // mLoadingAnimation = AnimationUtils.loadAnimation(VideoActivity.this,
-        // R.anim.loading_rotate);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
@@ -296,6 +301,9 @@ public class MainActivity extends Activity implements
 
     }
 
+    /**
+     * 各种广播接收器 屏幕的 电量等基本信息
+     */
     private void manageReceivers() {
         if (!mReceiverRegistered) {
             mScreenReceiver = new ScreenReceiver();
@@ -318,11 +326,15 @@ public class MainActivity extends Activity implements
                 if (mBatteryReceiver != null)
                     unregisterReceiver(mBatteryReceiver);
             } catch (IllegalArgumentException e) {
+                e.printStackTrace();
             }
             mReceiverRegistered = false;
         }
     }
 
+    /**
+     * 设置播放文件的名字
+     */
     private void setFileName() {
         if (mUri != null) {
             String name = null;
@@ -359,6 +371,9 @@ public class MainActivity extends Activity implements
         setResult(resultCode, i);
     }
 
+    /**
+     * 播放完毕之后呢
+     */
     private void resultFinish(int resultCode) {
         applyResult(resultCode);
         if (DeviceUtils.hasICS() && resultCode != RESULT_FAILED) {
@@ -368,6 +383,9 @@ public class MainActivity extends Activity implements
         }
     }
 
+    /**
+     * 释放播放器的资源
+     */
     private void release() {
         if (vPlayer != null) {
             if (DeviceUtils.hasICS()) {
@@ -380,19 +398,24 @@ public class MainActivity extends Activity implements
     }
 
     private void reOpen(Uri path, String name, boolean fromStart) {
+        //要是初始化了成功就保存位置释放资源
         if (isInitialized()) {
             savePosition();
             vPlayer.release();
             vPlayer.releaseContext();
         }
         Intent i = getIntent();
+        //保存是否锁屏
         if (mMediaController != null)
             i.putExtra("lockScreen", mMediaController.isLocked());
+        //保存开始的位置
         i.putExtra("startPosition", PreferenceUtils.getFloat(mUri
                 + VP.SESSION_LAST_POSITION_SUFIX, 7.7f));
         i.putExtra("fromStart", fromStart);
+        //保存display的名字
         i.putExtra("displayName", name);
         i.setData(path);
+        // TODO: 16/3/16 这个地方需要调试
         parseIntent(i);
         mUri = path;
         if (mViewRoot != null)
@@ -405,6 +428,9 @@ public class MainActivity extends Activity implements
         reOpen(mUri, mDisplayName, false);
     }
 
+    /**
+     * 开始播放视频
+     */
     protected void startPlayer() {
         if (isInitialized() && mScreenReceiver.screenOn
                 && !vPlayer.isBuffering()) {
@@ -414,17 +440,26 @@ public class MainActivity extends Activity implements
         }
     }
 
+    /**
+     * 停止播放视频
+     */
     protected void stopPlayer() {
         if (isInitialized()) {
             vPlayer.stop();
         }
     }
 
+    /**
+     * 设置电池信息
+     */
     private void setBatteryLevel() {
         if (mMediaController != null)
             mMediaController.setBatteryLevel(mBatteryLevel);
     }
 
+    /**
+     * 电池信息的广播接收者
+     */
     private class BatteryReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -438,6 +473,7 @@ public class MainActivity extends Activity implements
         }
     }
 
+    // TODO: 16/3/16  UserPresentReceiver
     private class UserPresentReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -447,13 +483,12 @@ public class MainActivity extends Activity implements
         }
     }
 
+    /**
+     * 是否在前台运行
+     */
     private boolean isRootActivity() {
         return ApplicationUtils.isTopActivity(getApplicationContext(),
                 getClass().getName());
-        // ActivityManager activity = (ActivityManager)
-        // getSystemService(Context.ACTIVITY_SERVICE);
-        // return
-        // activity.getRunningTasks(1).get(0).topActivity.flattenToString().endsWith("io.vov.vitamio.activity.VideoActivity");
     }
 
     public class HeadsetPlugReceiver extends BroadcastReceiver {
@@ -472,6 +507,9 @@ public class MainActivity extends Activity implements
         };
     }
 
+    /**
+     * 屏幕开关的广播
+     */
     private class ScreenReceiver extends BroadcastReceiver {
         private boolean screenOn = true;
 
@@ -486,6 +524,9 @@ public class MainActivity extends Activity implements
         }
     }
 
+    /**
+     * 视频播放器的初始化设置
+     */
     private void loadVPlayerPrefs() {
         if (!isInitialized())
             return;
@@ -506,6 +547,9 @@ public class MainActivity extends Activity implements
             setVideoLayout();
     }
 
+    /**
+     * 设置OutlineTextView样式
+     */
     private void setTextViewStyle(OutlineTextView v) {
         v.setTextColor(VP.DEFAULT_SUB_COLOR);
         v.setTypeface(VP.getTypeface(VP.DEFAULT_TYPEFACE_INT),
@@ -514,6 +558,9 @@ public class MainActivity extends Activity implements
                 VP.DEFAULT_SUB_SHADOWCOLOR);
     }
 
+    /**
+     * 判断是否初始化成功组件
+     */
     private boolean isInitialized() {
         return (mCreated && vPlayer != null && vPlayer.isInitialized());
     }
@@ -614,10 +661,12 @@ public class MainActivity extends Activity implements
                     resultFinish(RESULT_FAILED);
                     break;
                 case BUFFER_START:
+                    //开始缓存
                     setVideoLoadingLayoutVisibility(View.VISIBLE);
                     vPlayerHandler.sendEmptyMessageDelayed(BUFFER_PROGRESS, 1000);
                     break;
                 case BUFFER_PROGRESS:
+                    //缓存进度大于100
                     if (vPlayer.getBufferProgress() >= 100) {
                         setVideoLoadingLayoutVisibility(View.GONE);
                     } else {
@@ -630,6 +679,7 @@ public class MainActivity extends Activity implements
                     }
                     break;
                 case BUFFER_COMPLETE:
+                    //缓存完成
                     setVideoLoadingLayoutVisibility(View.GONE);
                     vPlayerHandler.removeMessages(BUFFER_PROGRESS);
                     break;
@@ -655,14 +705,18 @@ public class MainActivity extends Activity implements
         }
     };
 
+    /**
+     * 设置视频缓冲的等待可见不可见
+     */
     private void setVideoLoadingLayoutVisibility(int visibility) {
         if (mVideoLoadingLayout != null) {
-            // if (visibility == View.VISIBLE)
-            // mLoadingProgressView.startAnimation(mLoadingAnimation);
             mVideoLoadingLayout.setVisibility(visibility);
         }
     }
 
+    /**
+     * 视频播放器的基本状态：
+     */
     private PlayerService.VPlayerListener vPlayerListener = new PlayerService.VPlayerListener() {
         @Override
         public void onHWRenderFailed() {
@@ -769,6 +823,9 @@ public class MainActivity extends Activity implements
                 vPlayer.getVideoAspectRatio());
     }
 
+    /**
+     * 保存播放时候的位置
+     */
     private void savePosition() {
         if (vPlayer != null && mUri != null) {
             PreferenceUtils.put(
@@ -800,6 +857,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public int getBufferPercentage() {
+        //获取缓存的百分之
         if (isInitialized())
             return (int) (vPlayer.getBufferProgress() * 100);
         return 0;
@@ -807,6 +865,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public long getCurrentPosition() {
+        //获取当前的位置
         if (isInitialized())
             return vPlayer.getCurrentPosition();
         return (long) (getStartPosition() * vPlayer.getDuration());
@@ -814,6 +873,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public long getDuration() {
+        //获取持续时间
         if (isInitialized())
             return vPlayer.getDuration();
         return 0;
@@ -821,6 +881,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public boolean isPlaying() {
+        //获取当前是否在播放
         if (isInitialized())
             return vPlayer.isPlaying();
         return false;
@@ -828,18 +889,21 @@ public class MainActivity extends Activity implements
 
     @Override
     public void pause() {
+        //暂停播放视频
         if (isInitialized())
             vPlayer.stop();
     }
 
     @Override
     public void seekTo(long arg0) {
+        //跳转到位置播放
         if (isInitialized())
             vPlayer.seekTo((float) ((double) arg0 / vPlayer.getDuration()));
     }
 
     @Override
     public void start() {
+        //开始播放
         if (isInitialized())
             vPlayer.start();
     }
@@ -882,8 +946,9 @@ public class MainActivity extends Activity implements
     @SuppressLint("SimpleDateFormat")
     @Override
     public void snapshot() {
+        // TODO: 16/3/16 截图的相关操作
         if (!com.vanco.abplayer.FileUtils.sdAvailable()) {
-          //  ToastUtils.showToast(R.string.file_explorer_sdcard_not_available);
+          Toast.makeText(MainActivity.this,"文件存储路径不存在",Toast.LENGTH_SHORT).show();
         } else {
             Uri imgUri = null;
             Bitmap bitmap = vPlayer.getCurrentFrame();
@@ -908,10 +973,9 @@ public class MainActivity extends Activity implements
             if (imgUri != null) {
                 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                         imgUri));
-//                ToastUtils.showLongToast(getString(
-//                        R.string.video_screenshot_save_in, imgUri.getPath()));
+                Toast.makeText(MainActivity.this,R.string.video_screenshot_save_in,Toast.LENGTH_SHORT).show();
             } else {
-//                ToastUtils.showToast(R.string.video_screenshot_failed);
+                Toast.makeText(MainActivity.this,R.string.video_screenshot_failed,Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -976,7 +1040,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public void setDanmakushow(boolean isShow) {
-        // TODO Auto-generated method stub
+        //弹幕不做操作
 
     }
 }
