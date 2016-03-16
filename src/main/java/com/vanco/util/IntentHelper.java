@@ -99,7 +99,7 @@ public final class IntentHelper {
 				ctx.startActivity(intent);
 			}
 		} catch (NameNotFoundException e) {
-
+			e.printStackTrace();
 		}
 	}
 }

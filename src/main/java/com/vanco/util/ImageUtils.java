@@ -151,7 +151,9 @@ public class ImageUtils {
 		return saveBitmap(new File(path), bitmap);
 	}
 
-	/** 保存图片到文件 */
+	/**
+	 * 保存图片到文件
+     */
 	public static boolean saveBitmap(File f, Bitmap bitmap) {
 		if (bitmap == null || bitmap.isRecycled())
 			return false;
@@ -167,11 +169,11 @@ public class ImageUtils {
 			fOut.flush();
 			return true;
 		} catch (FileNotFoundException e) {
-
+			e.printStackTrace();
 		} catch (IOException e) {
-
+			e.printStackTrace();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		} finally {
 			if (fOut != null) {
 				try {
@@ -204,9 +206,9 @@ public class ImageUtils {
 			bitmap = BitmapFactory.decodeStream(ctx.getContentResolver()
 					.openInputStream(uri), null, options);
 		} catch (FileNotFoundException e) {
-
+			e.printStackTrace();
 		} catch (OutOfMemoryError e) {
-
+			e.printStackTrace();
 		}
 		return bitmap;
 	}
@@ -238,11 +240,6 @@ public class ImageUtils {
 
 	/**
 	 * 获取图片圆角
-	 *
-	 * @param bitmap
-	 * @param roundPx
-	 *            圆角度数
-	 * @return
 	 */
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {
 
@@ -267,9 +264,6 @@ public class ImageUtils {
 
 	/**
 	 * 转行Drawable为Bitmap对象
-	 *
-	 * @param drawable
-	 * @return
 	 */
 	public static Bitmap toBitmap(Drawable drawable) {
 		int width = drawable.getIntrinsicWidth();
@@ -292,7 +286,6 @@ public class ImageUtils {
 	 *            缩放后宽
 	 * @param dstHeight
 	 *            缩放后高
-	 * @return
 	 */
 	public static Bitmap scaledBitmap(Bitmap src, int dstWidth, int dstHeight) {
 		// 原图不能为空也不能已经被回收掉了
@@ -311,11 +304,7 @@ public class ImageUtils {
 
 	/**
 	 * 按比例缩放图片
-	 * 
-	 * @param src
-	 * @param scale
-	 *            例如2 就是二分之一
-	 * @return
+	 * 例如2 就是二分之一
 	 */
 	public static Bitmap scaledBitmap(Bitmap src, int scale) {
 		if (src == null || src.isRecycled()) {
@@ -328,9 +317,6 @@ public class ImageUtils {
 
 	/**
 	 * 将图片转换成字节数组
-	 * 
-	 * @param bitmap
-	 * @return
 	 */
 	public static byte[] toBytes(Bitmap bitmap) {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

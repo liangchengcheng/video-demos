@@ -10,11 +10,13 @@ import com.vanco.abplayer.ABPlayerApplication;
 
 public final class PreferenceUtils {
 
-	/** 清空数据 */
+	/**
+	 * 清空数据
+     */
 	public static void reset(final Context ctx) {
 		SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
 		edit.clear();
-		edit.commit();
+		edit.apply();
 	}
 
 	public static String getString(String key, String defValue) {
@@ -49,7 +51,7 @@ public final class PreferenceUtils {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ABPlayerApplication.getContext());
 		Editor editor = sharedPreferences.edit();
 		editor.putFloat(key, value);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static SharedPreferences getPreferences() {
@@ -68,7 +70,7 @@ public final class PreferenceUtils {
 		SharedPreferences sharedPreferences = ABPlayerApplication.getContext().getSharedPreferences("preference_mu", Context.MODE_MULTI_PROCESS);
 		Editor editor = sharedPreferences.edit();
 		editor.putString(key, value);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static String getStringProcess(String key, String defValue) {
@@ -85,28 +87,28 @@ public final class PreferenceUtils {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ABPlayerApplication.getContext());
 		Editor editor = sharedPreferences.edit();
 		editor.putString(key, value);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static void putLong(String key, long value) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ABPlayerApplication.getContext());
 		Editor editor = sharedPreferences.edit();
 		editor.putLong(key, value);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static void putBoolean(String key, boolean value) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ABPlayerApplication.getContext());
 		Editor editor = sharedPreferences.edit();
 		editor.putBoolean(key, value);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static void putInt(String key, int value) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ABPlayerApplication.getContext());
 		Editor editor = sharedPreferences.edit();
 		editor.putInt(key, value);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static void remove(String... keys) {
@@ -116,7 +118,7 @@ public final class PreferenceUtils {
 			for (String key : keys) {
 				editor.remove(key);
 			}
-			editor.commit();
+			editor.apply();
 		}
 	}
 }

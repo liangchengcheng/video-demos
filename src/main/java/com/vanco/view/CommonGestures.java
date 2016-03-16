@@ -9,9 +9,6 @@ import android.view.ScaleGestureDetector;
 
 import com.vanco.util.DeviceUtils;
 
-/**
- * Created by lcc on 16/3/15.
- */
 public class CommonGestures {
 
     public static final int SCALE_STATE_BEGIN = 0;
@@ -145,21 +142,22 @@ public class CommonGestures {
     private TouchListener mListener;
 
     public interface TouchListener {
-        public void onGestureBegin();
 
-        public void onGestureEnd();
+        void onGestureBegin();
 
-        public void onLeftSlide(float percent);
+        void onGestureEnd();
 
-        public void onRightSlide(float percent);
+        void onLeftSlide(float percent);
 
-        public void onSingleTap();
+        void onRightSlide(float percent);
 
-        public void onDoubleTap();
+        void onSingleTap();
 
-        public void onScale(float scaleFactor, int state);
+        void onDoubleTap();
 
-        public void onLongPress();
+        void onScale(float scaleFactor, int state);
+
+        void onLongPress();
     }
 }
 

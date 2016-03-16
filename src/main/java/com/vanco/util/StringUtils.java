@@ -29,8 +29,7 @@ public class StringUtils {
 	private static final double KB = 1024.0;
 	private static final double MB = 1048576.0;
 	private static final double GB = 1073741824.0;
-	public static final SimpleDateFormat DATE_FORMAT_PART = new SimpleDateFormat(
-			"HH:mm");
+	public static final SimpleDateFormat DATE_FORMAT_PART = new SimpleDateFormat("HH:mm");
 
 	public static String currentTimeString() {
 		return DATE_FORMAT_PART.format(Calendar.getInstance().getTime());
@@ -53,10 +52,6 @@ public class StringUtils {
 
 	/**
 	 * 格式化日期字符串
-	 * 
-	 * @param date
-	 * @param pattern
-	 * @return
 	 */
 	public static String formatDate(Date date, String pattern) {
 		SimpleDateFormat format = new SimpleDateFormat(pattern);
@@ -65,9 +60,6 @@ public class StringUtils {
 
 	/**
 	 * 格式化日期字符串
-	 * 
-	 * @param date
-	 * @return 例如2011-3-24
 	 */
 	public static String formatDate(Date date) {
 		return formatDate(date, DEFAULT_DATE_PATTERN);
@@ -79,8 +71,6 @@ public class StringUtils {
 
 	/**
 	 * 获取当前时间 格式为yyyy-MM-dd 例如2011-07-08
-	 * 
-	 * @return
 	 */
 	public static String getDate() {
 		return formatDate(new Date(), DEFAULT_DATE_PATTERN);
@@ -95,8 +85,6 @@ public class StringUtils {
 
 	/**
 	 * 获取当前时间
-	 * 
-	 * @return
 	 */
 	public static String getDateTime() {
 		return formatDate(new Date(), DEFAULT_DATETIME_PATTERN);
@@ -104,8 +92,6 @@ public class StringUtils {
 
 	/**
 	 * 格式化日期时间字符串
-	 * 
-	 * @param date
 	 * @return 例如2011-11-30 16:06:54
 	 */
 	public static String formatDateTime(Date date) {
@@ -118,9 +104,6 @@ public class StringUtils {
 	
 	/**
 	 * 格林威时间转换
-	 * 
-	 * @param gmt
-	 * @return
 	 */
 	public static String formatGMTDate(String gmt) {
 		TimeZone timeZoneLondon = TimeZone.getTimeZone(gmt);
@@ -130,10 +113,6 @@ public class StringUtils {
 
 	/**
 	 * 拼接数组
-	 * 
-	 * @param array
-	 * @param separator
-	 * @return
 	 */
 	public static String join(final ArrayList<String> array,
 							  final String separator) {
@@ -165,29 +144,17 @@ public class StringUtils {
 
 	/**
 	 * 判断字符串是否为空
-	 * 
-	 * @param str
-	 * @return
 	 */
 	public static boolean isEmpty(String str) {
 		return str == null || str.length() == 0;
 	}
 
-	/**
-	 * 
-	 * @param str
-	 * @return
-	 */
 	public static String trim(String str) {
 		return str == null ? EMPTY : str.trim();
 	}
 
 	/**
 	 * 转换时间显示
-	 * 
-	 * @param time
-	 *            毫秒
-	 * @return
 	 */
 	public static String generateTime(long time) {
 		int totalSeconds = (int) (time / 1000);
@@ -199,7 +166,9 @@ public class StringUtils {
 				seconds) : String.format("%02d:%02d", minutes, seconds);
 	}
 
-	/** 根据秒速获取时间格式 */
+	/**
+	 * 根据秒速获取时间格式
+     */
 	public static String gennerTime(int totalSeconds) {
 		int seconds = totalSeconds % 60;
 		int minutes = (totalSeconds / 60) % 60;
@@ -208,9 +177,6 @@ public class StringUtils {
 
 	/**
 	 * 转换文件大小
-	 * 
-	 * @param size
-	 * @return
 	 */
 	public static String generateFileSize(long size) {
 		String fileSize;
@@ -226,6 +192,9 @@ public class StringUtils {
 		return fileSize;
 	}
 
+	/**
+	 * 获取规范化 的时间格式
+     */
 	public static String getTimeDiff(long time) {
 		// Calendar cal = Calendar.getInstance();
 		long diff = 0;
@@ -265,8 +234,6 @@ public class StringUtils {
 	 *            起始字符串 例如：<title>
 	 * @param end
 	 *            结束字符串 例如：</title>
-	 * @param defaultValue
-	 * @return
 	 */
 	public static String substring(String search, String start, String end,
 								   String defaultValue) {
@@ -292,7 +259,6 @@ public class StringUtils {
 	 *            起始字符串 例如：<title>
 	 * @param end
 	 *            结束字符串 例如：</title>
-	 * @return
 	 */
 	public static String substring(String search, String start, String end) {
 		return substring(search, start, end, "");
@@ -300,9 +266,6 @@ public class StringUtils {
 
 	/**
 	 * 拼接字符串
-	 * 
-	 * @param strs
-	 * @return
 	 */
 	public static String concat(String... strs) {
 		StringBuffer result = new StringBuffer();
@@ -315,7 +278,9 @@ public class StringUtils {
 		return result.toString();
 	}
 
-	/** 获取中文字符个数 */
+	/**
+	 * 获取中文字符个数
+     */
 	public static int getChineseCharCount(String str) {
 		String tempStr;
 		int count = 0;
@@ -328,7 +293,9 @@ public class StringUtils {
 		return count;
 	}
 
-	/** 获取英文字符个数 */
+	/**
+	 * 获取英文字符个数
+     */
 	public static int getEnglishCount(String str) {
 		String tempStr;
 		int count = 0;
@@ -341,11 +308,14 @@ public class StringUtils {
 		return count;
 	}
 
+	/**
+	 * UTF8编码
+     */
 	public static String encode(String url) {
 		try {
 			return URLEncoder.encode(url, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-
+			e.printStackTrace();
 		}
 		return url;
 	}

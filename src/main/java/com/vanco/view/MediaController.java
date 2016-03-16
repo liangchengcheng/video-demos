@@ -53,7 +53,6 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-
 public class MediaController extends FrameLayout {
 	private MediaPlayerControl mPlayer;
 	private Activity mContext;
@@ -124,7 +123,6 @@ public class MediaController extends FrameLayout {
 			mDanmakuSend.setVisibility(View.GONE);
 			mDanmakuSwitch.setVisibility(View.GONE);
 		}
-		
 	}
 
 	public MediaController(Context context, boolean locked) {
@@ -250,6 +248,7 @@ public class MediaController extends FrameLayout {
 		mProgress.setOnSeekBarChangeListener(mSeekListener);
 		mProgress.setMax(DEFAULT_SEEKBAR_VALUE);
 
+		// TODO: 16/3/16 弹幕相关 
 		mDanmakuSend = (ImageButton) v.findViewById(R.id.mediacontroller_send_danmaku);
 		mDanmakuSend.setOnClickListener(mDanmakuSendListener);
 
@@ -359,7 +358,7 @@ public class MediaController extends FrameLayout {
 				mControlsLayout.startAnimation(mAnimSlideOutTop);
 				mSystemInfoLayout.startAnimation(mAnimSlideOutBottom);
 			} catch (IllegalArgumentException ex) {
-
+				ex.printStackTrace();
 			}
 			mShowing = false;
 		}
@@ -654,7 +653,7 @@ public class MediaController extends FrameLayout {
 			Field buttonBrightness = layoutParams.getClass().getField("buttonBrightness");
 			buttonBrightness.set(layoutParams, val);
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		window.setAttributes(layoutParams);
 	}

@@ -26,8 +26,8 @@ import android.view.ViewGroup.LayoutParams;
 
 import com.vanco.util.DeviceUtils;
 
-
 public class VideoView extends SurfaceView {
+
 	private Activity mActivity;
 	private SurfaceHolder mSurfaceHolder;
 	private int mSurfaceWidth, mSurfaceHeight;
@@ -51,7 +51,6 @@ public class VideoView extends SurfaceView {
 		mListener = l;
 		if (mSurfaceHolder == null)
 			mSurfaceHolder = getHolder();
-
 		// These methods is set to hw decoder or sw decoder, <= 2.3
 		if (push)
 			getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -84,7 +83,6 @@ public class VideoView extends SurfaceView {
 		mVideoHeight = lp.height;
 		setLayoutParams(lp);
 		getHolder().setFixedSize(mSurfaceWidth, mSurfaceHeight);
-		//Log.d("VIDEO: %dx%dx%f, Surface: %dx%d, LP: %dx%d, Window: %dx%dx%f", videoWidth, videoHeight, videoAspectRatio, mSurfaceWidth, mSurfaceHeight, lp.width, lp.height, windowWidth, windowHeight, windowRatio);
 	}
 
 	public void setVideoLayout(int layout, float userRatio, int videoWidth, int videoHeight, float videoRatio) {
@@ -117,6 +115,7 @@ public class VideoView extends SurfaceView {
 	private SurfaceCallback mListener;
 
 	public interface SurfaceCallback {
+
 		public void onSurfaceCreated(SurfaceHolder holder);
 
 		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height);

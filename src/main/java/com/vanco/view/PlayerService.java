@@ -47,6 +47,7 @@ public class PlayerService extends Service implements
 		OnBufferingUpdateListener, OnCompletionListener, OnPreparedListener,
 		OnVideoSizeChangedListener, OnErrorListener, OnInfoListener,
 		OnSeekCompleteListener, OnTimedTextListener {
+
 	private MediaPlayer mPlayer;
 	private VPlayerListener mListener;
 	private Uri mUri;
@@ -82,6 +83,7 @@ public class PlayerService extends Service implements
 	public void onCreate() {
 		super.onCreate();
 		mInitialized = false;
+		//初始化电话监听器
 		mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		mTelephonyManager.listen(mPhoneListener,
 				PhoneStateListener.LISTEN_CALL_STATE);
@@ -90,6 +92,7 @@ public class PlayerService extends Service implements
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		//判断是否初始化成功
 		if (Vitamio.isInitialized(this)) {
 			vplayerInit(intent.getBooleanExtra("isHWCodec", false));
 		} else {
@@ -456,6 +459,7 @@ public class PlayerService extends Service implements
 	}
 
 	public static interface VPlayerListener {
+
 		public void onHWRenderFailed();
 
 		public void onVideoSizeChanged(int width, int height);
@@ -483,6 +487,9 @@ public class PlayerService extends Service implements
 		public void onCloseComplete();
 	}
 
+	/**
+	 * 当接听电话的时候判断是在播放的话就暂停
+	 */
 	private PhoneStateListener mPhoneListener = new PhoneStateListener() {
 		@Override
 		public void onCallStateChanged(int state, String incomingNumber) {
