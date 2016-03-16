@@ -106,8 +106,7 @@ public class MainActivity extends Activity implements
     private MediaController mMediaController;
     private PlayerService vPlayer;
     private ServiceConnection vPlayerServiceConnection;
-    // private Animation mLoadingAnimation;
-    // private View mLoadingProgressView;
+
 
     static {
         SCREEN_FILTER.addAction(Intent.ACTION_SCREEN_OFF);
@@ -127,6 +126,7 @@ public class MainActivity extends Activity implements
         vPlayerServiceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
+                //获取视频播放的服务
                 vPlayer = ((PlayerService.LocalBinder) service).getService();
                 mServiceConnected = true;
                 if (mSurfaceCreated)
@@ -139,10 +139,13 @@ public class MainActivity extends Activity implements
                 mServiceConnected = false;
             }
         };
-
+        //设置声音
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
         parseIntent(getIntent());
+        //添加页面
         loadView(R.layout.activity_video);
+        //注册各种广播
         manageReceivers();
 
         mCreated = true;
@@ -278,6 +281,7 @@ public class MainActivity extends Activity implements
     }
 
     private void parseIntent(Intent i) {
+
         Uri dat = IntentHelper.getIntentUri(i);
         if (dat == null)
             resultFinish(RESULT_FAILED);
@@ -372,7 +376,7 @@ public class MainActivity extends Activity implements
     }
 
     /**
-     * 播放完毕之后呢
+     * 播放完毕之后或者打开失败的话
      */
     private void resultFinish(int resultCode) {
         applyResult(resultCode);
@@ -633,13 +637,17 @@ public class MainActivity extends Activity implements
                     synchronized (mOpenLock) {
                         if (!mOpened.get() && vPlayer != null) {
                             mOpened.set(true);
+                            //设置监听视频播放状态的监听器
                             vPlayer.setVPlayerListener(vPlayerListener);
+                            //要是视频播放器初始化成功了的话
                             if (vPlayer.isInitialized())
+                                //获取他的Uri
                                 mUri = vPlayer.getUri();
 
                             if (mVideoView != null)
                                 vPlayer.setDisplay(mVideoView.getHolder());
                             if (mUri != null)
+                                //设置服务的初始化状态
                                 vPlayer.initialize(mUri, mDisplayName, mSaveUri,
                                         getStartPosition(), vPlayerListener,
                                         mParentId, mIsHWCodec);
@@ -647,17 +655,24 @@ public class MainActivity extends Activity implements
                     }
                     break;
                 case OPEN_START:
+                    //刚打开的时候
                     mVideoLoadingText.setText(R.string.video_layout_loading);
                     setVideoLoadingLayoutVisibility(View.VISIBLE);
                     break;
                 case OPEN_SUCCESS:
+                    //打开成功的时候
                     loadVPlayerPrefs();
+                    //舍子等待消失
                     setVideoLoadingLayoutVisibility(View.GONE);
+                    //设置基本的尺寸。
                     setVideoLayout();
+                    //开始播放
                     vPlayer.start();
+                    //附加控制器
                     attachMediaController();
                     break;
                 case OPEN_FAILED:
+                    //打开失败的话
                     resultFinish(RESULT_FAILED);
                     break;
                 case BUFFER_START:
