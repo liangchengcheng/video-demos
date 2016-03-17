@@ -25,6 +25,8 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.text.Html;
+import android.util.Log;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,6 +44,8 @@ public final class IntentHelper {
 		Uri result = null;
 		if (intent != null) {
 			result = intent.getData();
+			Log.e("lcc ks",result.toString());
+			//我设置了Data
 			if (result == null) {
 				final String type = intent.getType();
 				String sharedUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -58,6 +62,7 @@ public final class IntentHelper {
 				}
 			}
 		}
+		Log.e("lcc zh",result.toString());
 		return result;
 	}
 

@@ -21,11 +21,24 @@ public class Start extends Activity {
             public void onClick(View v) {
                 Intent intent =new Intent(Start.this,MainActivity.class);
                 intent.setData(Uri.parse("http://mvvideo2.meitudata.com/5633c440f3dd33829.mp4"));
-                //intent.putExtra("path", item.url);
-                intent.putExtra("displayName","hhehe");
+                // TODO: 16/3/17 可能会引发bug 
+                intent.putExtra("path", "http://mvvideo2.meitudata.com/5633c440f3dd33829.mp4");
+                intent.putExtra("displayName","某科学的超电磁炮");
                 startActivity(intent);
                 startActivity(new Intent(Start.this,MainActivity.class));
             }
         });
+
+        findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Start.this, BiliVideoViewActivity.class);
+                intent.putExtra("displayName","111");
+                intent.putExtra("av","411001");
+                intent.putExtra("page","1");
+                startActivity(intent);
+            }
+        });
+
     }
 }

@@ -69,9 +69,6 @@ public class DeviceUtils {
 
 	/**
 	 * 判断是否是平板电脑
-	 * 
-	 * @param context
-	 * @return
 	 */
 	public static boolean isTablet(Context context) {
 		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
@@ -83,8 +80,6 @@ public class DeviceUtils {
 
 	/**
 	 * 获得设备型号
-	 * 
-	 * @return
 	 */
 	public static String getDeviceModel() {
 		return StringUtils.trim(Build.MODEL);
@@ -106,8 +101,6 @@ public class DeviceUtils {
 
 	/**
 	 * 获得设备制造商
-	 * 
-	 * @return
 	 */
 	public static String getManufacturer() {
 		return StringUtils.trim(Build.MANUFACTURER);
@@ -217,8 +210,6 @@ public class DeviceUtils {
 
 	/**
 	 * 软键盘是否已经打开
-	 * 
-	 * @return
 	 */
 	protected boolean isHardKeyboardOpen(Context ctx) {
 		return ctx.getResources().getConfiguration().hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO;

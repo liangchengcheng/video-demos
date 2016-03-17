@@ -18,6 +18,7 @@ package com.vanco.util;
 import java.lang.reflect.Array;
 
 public class ArrayUtils {
+
 	public static <T> T[] concat(T[] A, T[] B) {
 		final Class<?> typeofA = A.getClass().getComponentType();
 		@SuppressWarnings("unchecked")

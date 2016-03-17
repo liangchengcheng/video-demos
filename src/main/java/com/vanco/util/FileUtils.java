@@ -1,7 +1,9 @@
 package com.vanco.util;
 
+import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
@@ -282,5 +284,24 @@ public class FileUtils {
 				.getExternalStorageState())
 				|| Environment.MEDIA_MOUNTED.equals(Environment
 						.getExternalStorageState());
+	}
+	public static boolean isBlank(String s) {
+		return TextUtils.isEmpty(s);
+	}
+
+	public static String getPath(String uri) {
+		Log.i("FileUtils#getPath(%s)", uri);
+		if (isBlank(uri))
+			return null;
+		if (uri.startsWith("file://") && uri.length() > 7)
+			return Uri.decode(uri.substring(7));
+		return Uri.decode(uri);
+	}
+
+	public static String getName(String uri) {
+		String path = getPath(uri);
+		if (path != null)
+			return new File(path).getName();
+		return null;
 	}
 }

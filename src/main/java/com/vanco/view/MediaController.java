@@ -114,7 +114,10 @@ public class MediaController extends FrameLayout {
 		initFloatingWindow();
 		initResources();
 	}
-	
+
+	/**
+	 * 设置弹幕的可见不可见
+     */
 	public void setDanmakuVisible(boolean isVisible){
 		if(isVisible){
 			mDanmakuSend.setVisibility(View.VISIBLE);
@@ -402,6 +405,9 @@ public class MediaController extends FrameLayout {
 		mPlayer.toggleVideoMode(mVideoMode);
 	}
 
+	/**
+	 * 锁定解锁屏幕设定
+     */
 	private void lock(boolean toLock) {
 		if (toLock) {
 			mLock.setImageResource(R.drawable.mediacontroller_lock);
@@ -434,6 +440,9 @@ public class MediaController extends FrameLayout {
 	private static final int MSG_HIDE_OPERATION_INFO = 5;
 	private static final int MSG_HIDE_OPERATION_VOLLUM = 6;
 
+	/**
+	 * MediaController 的操作类
+	 */
 	private static class MHandler extends Handler {
 		private WeakReference<MediaController> mc;
 
@@ -477,6 +486,9 @@ public class MediaController extends FrameLayout {
 		}
 	};
 
+	/**
+	 * 设置progress
+     */
 	private long setProgress() {
 		if (mPlayer == null || mDragging)
 			return 0;
@@ -620,7 +632,8 @@ public class MediaController extends FrameLayout {
 			return true;
 		}
 
-		if (event.getRepeatCount() == 0 && (keyCode == KeyEvent.KEYCODE_HEADSETHOOK || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE || keyCode == KeyEvent.KEYCODE_SPACE)) {
+		if (event.getRepeatCount() == 0 && (keyCode == KeyEvent.KEYCODE_HEADSETHOOK ||
+				keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE || keyCode == KeyEvent.KEYCODE_SPACE)) {
 			doPauseResume();
 			show(DEFAULT_TIME_OUT);
 			return true;
@@ -661,6 +674,9 @@ public class MediaController extends FrameLayout {
 		window.setAttributes(layoutParams);
 	}
 
+	/**
+	 * 更新暂停状态图片
+	 */
 	private void updatePausePlay() {
 		if (mPlayer.isPlaying())
 			mPauseButton.setImageResource(R.drawable.mediacontroller_pause);
@@ -668,6 +684,9 @@ public class MediaController extends FrameLayout {
 			mPauseButton.setImageResource(R.drawable.mediacontroller_play);
 	}
 
+	/**
+	 * 更新暂停功能
+	 */
 	private void doPauseResume() {
 		if (mPlayer.isPlaying())
 			mPlayer.pause();
@@ -714,6 +733,9 @@ public class MediaController extends FrameLayout {
 		}
 	};
 
+	/**
+	 * 当进度条拖到事件，快进，后退等
+	 */
 	private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
 		private boolean wasStopped = false;
 
@@ -736,10 +758,10 @@ public class MediaController extends FrameLayout {
 			if (!fromuser)
 				return;
 
-			long newposition = (mDuration * progress) / 1000;
-			String time = StringUtils.generateTime(newposition);
+			long new_position = (mDuration * progress) / 1000;
+			String time = StringUtils.generateTime(new_position);
 			if (mInstantSeeking)
-				mPlayer.seekTo(newposition);
+				mPlayer.seekTo(new_position);
 			setOperationInfo(time, 1500);
 			mCurrentTime.setText(time);
 		}
@@ -760,6 +782,9 @@ public class MediaController extends FrameLayout {
 		}
 	};
 
+	/**
+	 * 弹幕开关
+	 */
 	private View.OnClickListener mDanmakuSendListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -767,6 +792,9 @@ public class MediaController extends FrameLayout {
 		}
 	};
 
+	/**
+	 * 弹幕开关
+	 */
 	private View.OnClickListener mDanmakuSwitchListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {

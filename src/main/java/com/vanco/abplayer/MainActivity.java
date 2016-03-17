@@ -107,7 +107,6 @@ public class MainActivity extends Activity implements
     private PlayerService vPlayer;
     private ServiceConnection vPlayerServiceConnection;
 
-
     static {
         SCREEN_FILTER.addAction(Intent.ACTION_SCREEN_OFF);
     }
@@ -129,7 +128,7 @@ public class MainActivity extends Activity implements
                 //获取视频播放的服务
                 vPlayer = ((PlayerService.LocalBinder) service).getService();
                 mServiceConnected = true;
-                if (mSurfaceCreated)
+                if (mSurfaceCreated)//false
                     vPlayerHandler.sendEmptyMessage(OPEN_FILE);
             }
 
@@ -283,6 +282,7 @@ public class MainActivity extends Activity implements
     private void parseIntent(Intent i) {
 
         Uri dat = IntentHelper.getIntentUri(i);
+        // TODO: 16/3/17 data竟然等于null？
         if (dat == null)
             resultFinish(RESULT_FAILED);
 
@@ -355,8 +355,11 @@ public class MainActivity extends Activity implements
     }
 
     private void applyResult(int resultCode) {
+        //去除缓存进度的
         vPlayerHandler.removeMessages(BUFFER_PROGRESS);
+
         Intent i = new Intent();
+        // TODO: 16/3/17 此处的 mUri确实是null；
         i.putExtra("filePath", mUri.toString());
         if (isInitialized()) {
             i.putExtra("position", (double) vPlayer.getCurrentPosition()
@@ -634,6 +637,7 @@ public class MainActivity extends Activity implements
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case OPEN_FILE:
+                    //异步安全打开文件
                     synchronized (mOpenLock) {
                         if (!mOpened.get() && vPlayer != null) {
                             mOpened.set(true);
